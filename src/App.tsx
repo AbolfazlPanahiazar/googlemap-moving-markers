@@ -1,3 +1,4 @@
+import { Marker } from "@react-google-maps/api";
 import "./App.css";
 import Map from "./components/map";
 
@@ -9,7 +10,7 @@ function App() {
           lat: 51,
           lng: 17,
         }}
-        zoom={10}
+        zoom={5}
       />
     </div>
   );
