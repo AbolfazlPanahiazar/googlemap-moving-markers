@@ -19,7 +19,7 @@ interface IGoogleMap {
 const Map: React.FC<IGoogleMap> = ({ zoom, center }) => {
   const { isLoaded, loadError } = useLoadScript({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyBRxJucUrQqfh2z1DtWr-yBX4ujjHMpH1g",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API!,
     libraries: [],
   });
 
@@ -37,27 +37,33 @@ const Map: React.FC<IGoogleMap> = ({ zoom, center }) => {
     },
     {
       key: "second",
-      lat: 52,
-      lng: 17,
+      lat: 49,
+      lng: 15,
     },
     {
       key: "third",
-      lat: 51,
-      lng: 19,
+      lat: 48,
+      lng: 12,
     },
   ]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const newPositons = markersPosition.map((markerPosition) => {
-        return {
-          ...markerPosition,
-          lat: markerPosition.lat + 0.2,
-          lng: markerPosition.lng + 0.2,
-        };
-      });
-
-      setMarkersPosition(newPositons);
+      setMarkersPosition((oldPositions) =>
+        oldPositions.map((mp) => {
+          const latDiff = mp.lat - 50.5;
+          const lngDiff = mp.lng - 30.5;
+          const distance = Math.sqrt(latDiff * latDiff + lngDiff * lngDiff);
+          const speed = 0.1;
+          const directionLat = (50.5 - mp.lat) / distance;
+          const directionLng = (30.5 - mp.lng) / distance;
+          return {
+            ...mp,
+            lat: mp.lat + directionLat * speed,
+            lng: mp.lng + directionLng * speed,
+          };
+        })
+      );
     }, 1000);
 
     return () => {
@@ -84,7 +90,7 @@ const Map: React.FC<IGoogleMap> = ({ zoom, center }) => {
         zoom={zoom}
       >
         <MarkerF
-          key="marker_10"
+          key="marker_1"
           position={{
             lat: 50.5,
             lng: 30.5,

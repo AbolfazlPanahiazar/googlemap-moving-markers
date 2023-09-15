@@ -1,4 +1,3 @@
-import { Marker } from "@react-google-maps/api";
 import "./App.css";
 import Map from "./components/map";
 
